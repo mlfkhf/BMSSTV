@@ -5,6 +5,7 @@
 
 #define BMSSTV_LANG BMSSTV_LANG_EN
 #include "langs.hpp"
+#include "sstvprocessor.hpp"
 
 #include <iostream>
 #include <string>
@@ -35,19 +36,28 @@ int main(int argc, char** argv)
 	std::string
 		midi_file_path,
 		output_image_file_path,
-		sstv_format
-		;
+		sstv_format_argc;
 
-	app.add_option("-m,-i,--midiinput", midi_file_path,
-		"A midi file contains the reference music.");
+
+	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj);
 	app.add_option("-o,--outputfile", output_image_file_path, outputfile_bmj);
 	app.add_option("-f,--sstvformat", midi_file_path, sstvformat_bmj);
 
 	try {
 		app.parse(argc, argv);
 
-		if (sstv_formats.find(sstv_format) == sstv_formats.end())
-			throw CLI::ParseError(invailesstvformat_bmj + sstv_format, 1);
+		if (sstv_formats.find(sstv_format_argc) == sstv_formats.end())
+			throw CLI::ParseError(invailesstvformat_bmj + sstv_format_argc, 1);
+
+		sstvformats_ sstvformat;
+		{
+			if (sstv_format_argc == "martin1" || sstv_format_argc == "mt1")) sstvformat = martin1;
+			else if (sstv_format_argc == "martin2" || sstv_format_argc == "mt2") sstvformat = martin2;
+			else if (sstv_format_argc == "scottie1" || sstv_format_argc == "sct1") sstvformat = scottie1;
+			else if (sstv_format_argc == "scottie2" || sstv_format_argc == "sct2") sstvformat = scottie2;
+			else if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") sstvformat = scottiedx;
+		}
+		
 	}
 	catch (const CLI::ParseError& e) {
 		return app.exit(e);
