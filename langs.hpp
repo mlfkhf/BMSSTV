@@ -3,7 +3,8 @@
 #define BMSSTV_LANG_EN 1
 
 #ifndef BMSSTV_LANG
-#define BMSSTV_LANG BMSSTV_LANG_ZH_CN
+//#define BMSSTV_LANG BMSSTV_LANG_ZH_CN
+#define BMSSTV_LANG BMSSTV_LANG_EN
 #endif
 
 #if BMSSTV_LANG == BMSSTV_LANG_ZH_CN
@@ -18,6 +19,8 @@
 		....scottiedx - 输入scottiedx/sctdx\n\
 		"
 #define invailesstvformat_bmj "无效的 SSTV 格式: "
+#define tracknumber_bmj "音轨编号（单音轨时无需指定）"
+#define midifilecannotberead_bmj "无法读取的 MIDI 文件: "
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
 #define midiinput_bmj "A midi file contains the reference music."
@@ -31,4 +34,6 @@
 		....scottiedx -type scottiedx/sctdx\
 		"
 #define invailesstvformat_bmj "Invalid SSTV format: "
+#define tracknumber_bmj "Track number (no need to specify when single track)."
+#define midifilecannotberead_bmj "Failed to read MIDI file: "
 #endif
