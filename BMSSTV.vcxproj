@@ -150,6 +150,7 @@
     <ClCompile Include="sstvprocessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constvalue.hpp" />
     <ClInclude Include="include\CLI\App.hpp" />
     <ClInclude Include="include\CLI\Argv.hpp" />
     <ClInclude Include="include\CLI\CLI.hpp" />

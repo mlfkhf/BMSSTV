@@ -28,6 +28,7 @@
 #define midifile404_bmj "文件不存在:"
 #define cannotreadmidifile_bmj "无法读取 MIDI 文件 (文件可能损坏或不是有效的 MIDI 格式): "
 #define emptytrack_bmj "MIDI 文件没有音轨: "
+#define noteon_bmj "是否将 MIDI 文件中的 Note On 事件视为 SSTV 图像的有效音符（默认启用）。"
 
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
@@ -48,4 +49,5 @@
 #define midifile404_bmj "File not found:"
 #define cannotreadmidifile_bmj "Failed to read MIDI file (file may be damaged or not a valid MIDI format): "
 #define emptytrack_bmj "MIDI file has no track: "
+#define noteon_bmj "Whether to consider Note On events in MIDI file as valid notes for SSTV image (enabled by default)."
 #endif

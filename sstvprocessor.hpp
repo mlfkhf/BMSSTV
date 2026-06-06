@@ -6,6 +6,7 @@
 #include "include/stb/stb_image.h"
 #include "include/stb/stb_image_write.h"
 #include "include/midifile/MidiFile.h"
+#include <list>
 
 enum sstvformats_
 {
@@ -22,15 +23,14 @@ class MidiNoteReader
 	struct Note
 	{
 		int pitch;
-		int velocity;
 		double start_time;
 		double end_time;
 	};
 public:
-	std::vector<Note> notes;
+	std::list<Note> notes;
 
-	MidiNoteReader(const std::string& midi_file_path, double tempo, unsigned char track_number = 0);
+	MidiNoteReader(const std::string& midi_file_path, unsigned char track_number);
 
-	const std::vector<Note>& getNotes() const;
-
+	const std::list<Note>& getNotes() const;
+	static double tickToSeconds(int tick, double ticks_per_quarter, double tempo_bpm);
 };

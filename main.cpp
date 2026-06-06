@@ -5,6 +5,7 @@
 
 #include "langs.hpp"
 #include "sstvprocessor.hpp"
+#include "constvalue.hpp"
 
 #include <iostream>
 #include <filesystem>
@@ -54,7 +55,6 @@ int main(int argc, char** argv)
 	app.add_option("-t,--track", track_number, tracknumber_bmj)
 		->default_val(0)
 		->check(CLI::Range(0, 255));
-	app.add_option("--tempo", tempo, tempo_bmj)->default_val(120);
 
 	try {
 		app.parse(argc, argv);

@@ -218,5 +218,8 @@
     <ClInclude Include="langs.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="constvalue.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
