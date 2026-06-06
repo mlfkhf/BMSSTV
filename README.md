@@ -15,7 +15,7 @@
 
 ## `0x01` 如何使用？
 别问我，问程序。
-输入`BMSSTV -h`，回车，获取所有参数指令的帮助！
+输入`BMSSTV -h`，回车，获取所有参数指令的帮助！<br>
 <sub>PS:如果你认为这里真的需要写用法，你可以给我发一封邮件:mlfkhf@qq.com :e-mail: <br>谁知道我会不会写哈哈哈哈哈doge<sub>
 
 ## `0x02` 关于
@@ -26,15 +26,15 @@
 #### 以下是被本项目使用了的其他开源库（排名不分先后）：
 - midifile
 **Copyright (c) 2015 Craig Stuart Sapp**
-这个库遵循`MIT`协议。协议具体内容请参阅它的仓库中的许可协议文件。
+这个库遵循`MIT`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/craigsapp/midifile
 - CLI11
 **Copyright (c) 2017 Henry Schreiner**
-这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。
+这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/CLIUtils/CLI11
 - stb 
 **Copyright (c) 2017 Sean Barrett**
-这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。
+这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/nothings/stb
 
 感谢上面项目的作者！开源万岁！
