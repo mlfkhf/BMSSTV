@@ -1,7 +1,11 @@
 #pragma once
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
-#include "midifile/include/MidiFile.h"
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#include "include/stb/stb_image.h"
+#include "include/stb/stb_image_write.h"
+#include "include/midifile/MidiFile.h"
 
 enum sstvformats_
 {
@@ -25,7 +29,7 @@ class MidiNoteReader
 public:
 	std::vector<Note> notes;
 
-	MidiNoteReader(const std::string& midi_file_path, unsigned char track_number = 0);
+	MidiNoteReader(const std::string& midi_file_path, double tempo, unsigned char track_number = 0);
 
 	const std::vector<Note>& getNotes() const;
 

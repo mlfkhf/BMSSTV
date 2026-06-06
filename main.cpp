@@ -14,7 +14,7 @@
 #include <list>
 #include <set>
 
-#include "CLI11/include/CLI/CLI.hpp"
+#include "include/CLI/CLI.hpp"
 
 #define VERSION_C "ver build20260531"
 #define VERSION std::string(VERSION_C)
@@ -38,13 +38,23 @@ int main(int argc, char** argv)
 		output_image_file_path,
 		sstv_format_argc;
 	unsigned char track_number;
+	unsigned short tempo;
 
-	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(CLI::ExistingFile);
+	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
+		[](const std::string& filename) -> std::string {
+			if (!std::filesystem::exists(filename)) return midifile404_bmj + filename;
+			smf::MidiFile midifile;
+			if (!midifile.read(filename)) return cannotreadmidifile_bmj + filename;
+			if (midifile.getTrackCount() == 0) return emptytrack_bmj + filename;
+			return "";
+		}
+	);
 	app.add_option("-o,--outputfile", output_image_file_path, outputfile_bmj);
 	app.add_option("-f,--sstvformat", sstv_format_argc, sstvformat_bmj)->check(CLI::IsMember(sstv_formats));
 	app.add_option("-t,--track", track_number, tracknumber_bmj)
 		->default_val(0)
 		->check(CLI::Range(0, 255));
+	app.add_option("--tempo", tempo, tempo_bmj)->default_val(120);
 
 	try {
 		app.parse(argc, argv);

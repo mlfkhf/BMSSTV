@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Github\libremidi\include;E:\Github;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>E:\Github\libremidi\include;E:\Github;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\Github\libremidi\include;E:\Github;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>E:\Github\libremidi\include;E:\Github;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,10 +139,71 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\midifile\Binasc.cpp" />
+    <ClCompile Include="include\midifile\MidiEvent.cpp" />
+    <ClCompile Include="include\midifile\MidiEventList.cpp" />
+    <ClCompile Include="include\midifile\MidiFile.cpp" />
+    <ClCompile Include="include\midifile\MidiMessage.cpp" />
+    <ClCompile Include="include\midifile\Options.cpp" />
+    <ClCompile Include="include\stb\stb_vorbis.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sstvprocessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\CLI\App.hpp" />
+    <ClInclude Include="include\CLI\Argv.hpp" />
+    <ClInclude Include="include\CLI\CLI.hpp" />
+    <ClInclude Include="include\CLI\Config.hpp" />
+    <ClInclude Include="include\CLI\ConfigFwd.hpp" />
+    <ClInclude Include="include\CLI\Encoding.hpp" />
+    <ClInclude Include="include\CLI\Error.hpp" />
+    <ClInclude Include="include\CLI\ExtraValidators.hpp" />
+    <ClInclude Include="include\CLI\Formatter.hpp" />
+    <ClInclude Include="include\CLI\FormatterFwd.hpp" />
+    <ClInclude Include="include\CLI\impl\App_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Argv_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Config_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Encoding_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\ExtraValidators_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Formatter_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Option_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Split_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\StringTools_inl.hpp" />
+    <ClInclude Include="include\CLI\impl\Validators_inl.hpp" />
+    <ClInclude Include="include\CLI\Macros.hpp" />
+    <ClInclude Include="include\CLI\Option.hpp" />
+    <ClInclude Include="include\CLI\Split.hpp" />
+    <ClInclude Include="include\CLI\StringTools.hpp" />
+    <ClInclude Include="include\CLI\Timer.hpp" />
+    <ClInclude Include="include\CLI\TypeTools.hpp" />
+    <ClInclude Include="include\CLI\Validators.hpp" />
+    <ClInclude Include="include\CLI\Version.hpp" />
+    <ClInclude Include="include\midifile\Binasc.h" />
+    <ClInclude Include="include\midifile\MidiEvent.h" />
+    <ClInclude Include="include\midifile\MidiEventList.h" />
+    <ClInclude Include="include\midifile\MidiFile.h" />
+    <ClInclude Include="include\midifile\MidiMessage.h" />
+    <ClInclude Include="include\midifile\Options.h" />
+    <ClInclude Include="include\stb\stb_connected_components.h" />
+    <ClInclude Include="include\stb\stb_c_lexer.h" />
+    <ClInclude Include="include\stb\stb_divide.h" />
+    <ClInclude Include="include\stb\stb_ds.h" />
+    <ClInclude Include="include\stb\stb_dxt.h" />
+    <ClInclude Include="include\stb\stb_easy_font.h" />
+    <ClInclude Include="include\stb\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="include\stb\stb_hexwave.h" />
+    <ClInclude Include="include\stb\stb_image.h" />
+    <ClInclude Include="include\stb\stb_image_resize2.h" />
+    <ClInclude Include="include\stb\stb_image_write.h" />
+    <ClInclude Include="include\stb\stb_include.h" />
+    <ClInclude Include="include\stb\stb_leakcheck.h" />
+    <ClInclude Include="include\stb\stb_perlin.h" />
+    <ClInclude Include="include\stb\stb_rect_pack.h" />
+    <ClInclude Include="include\stb\stb_sprintf.h" />
+    <ClInclude Include="include\stb\stb_textedit.h" />
+    <ClInclude Include="include\stb\stb_tilemap_editor.h" />
+    <ClInclude Include="include\stb\stb_truetype.h" />
+    <ClInclude Include="include\stb\stb_voxel_render.h" />
     <ClInclude Include="langs.hpp" />
     <ClInclude Include="sstvprocessor.hpp" />
   </ItemGroup>
