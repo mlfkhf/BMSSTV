@@ -24,15 +24,15 @@
 这是一个十分自由的项目，所有由我编写的代码遵循`MIT`协议，这意味着你可以自由散布这个项目的代码或者是使用它来做其他事，但需要在任何情形保留我的版权声明<sub>（不知道这是什么？字符串`"Copyright 2026 Qinuo Sun(BH6BMJ)"`说它也不知道~）</sub>。
 
 #### 以下是被本项目使用了的其他开源库（排名不分先后）：
-- midifile
+- midifile<br>
 **Copyright (c) 2015 Craig Stuart Sapp**
 这个库遵循`MIT`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/craigsapp/midifile
-- CLI11
+- CLI11<br>
 **Copyright (c) 2017 Henry Schreiner**
 这个库遵循`BSD 3-Clause`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/CLIUtils/CLI11
-- stb 
+- stb<br>
 **Copyright (c) 2017 Sean Barrett**
 这个库遵循`BSD 3-Clause`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/nothings/stb
