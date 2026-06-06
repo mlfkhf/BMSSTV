@@ -6,31 +6,34 @@
 #include "include/stb/stb_image.h"
 #include "include/stb/stb_image_write.h"
 #include "include/midifile/MidiFile.h"
+#include "constvalue.hpp"
 #include <list>
 
-enum sstvformats_
-{
-	martin1,
-	martin2,
-	scottie1,
-	scottie2,
-	scottiedx
-};
 
-
-class MidiNoteReader
+class MidiNoteToImage
 {
+public:
 	struct Note
 	{
 		int pitch;
 		double start_time;
 		double end_time;
 	};
-public:
-	std::list<Note> notes;
-
-	MidiNoteReader(const std::string& midi_file_path, unsigned char track_number);
+	enum sstvformats_
+	{
+		martin1,
+		martin2,
+		scottie1,
+		scottie2,
+		scottiedx
+	};
+	MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_);
 
 	const std::list<Note>& getNotes() const;
+	const sstvformats_& getSSTVformat() const;
 	static double tickToSeconds(int tick, double ticks_per_quarter, double tempo_bpm);
+	static double midiPitchToFrequency(int pitch, double a4_freq = 440.0);
+private:
+	std::list<Note> notes;
+	sstvformats_ sstvformat;
 };

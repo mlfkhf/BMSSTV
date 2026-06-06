@@ -22,24 +22,25 @@
 
 const std::set<std::string> sstv_formats = {
 	"martin1","mt1",
-	"martin2", "mt2"
-	"scottie1", "sct1"
-	"scottie2", "sct2"
+	"martin2", "mt2",
+	"scottie1", "sct1",
+	"scottie2", "sct2",
 	"scottiedx", "sctdx"
 };
+
+const std::set<std::string> output_image_formats = { "png", "bmp" ,"jpg", "jpeg" };
+enum output_image_formatse {png, bmp, jpg};
 
 int main(int argc, char** argv)
 {
 	CLI::App app{ (std::string("BMSSTV - Build Music SSTV ") + VERSION + " by BH6BMJ") };
 	argv = app.ensure_utf8(argv);
-	app.require_subcommand();
 
 	std::string
 		midi_file_path,
 		output_image_file_path,
 		sstv_format_argc;
 	unsigned char track_number;
-	unsigned short tempo;
 
 	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
@@ -50,8 +51,20 @@ int main(int argc, char** argv)
 			return "";
 		}
 	);
-	app.add_option("-o,--outputfile", output_image_file_path, outputfile_bmj);
+	app.add_option("-o,--outputfile", output_image_file_path, outputfile_bmj)->check(
+		[](const std::string& imagefileext)->std::string
+		{
+			auto ext = std::filesystem::path(imagefileext).extension().string();
+			if (!ext.empty()) {
+				std::string ext = ext.substr(1);
+				if (output_image_formats.find(ext) == output_image_formats.end()) return invaildimageformat_bmj + ext;
+				return "";
+			}
+			else return invaildimageformat_bmj + ext;
+		}
+	);
 	app.add_option("-f,--sstvformat", sstv_format_argc, sstvformat_bmj)->check(CLI::IsMember(sstv_formats));
+	
 	app.add_option("-t,--track", track_number, tracknumber_bmj)
 		->default_val(0)
 		->check(CLI::Range(0, 255));
@@ -64,14 +77,18 @@ int main(int argc, char** argv)
 		return app.exit(e);
 	}
 
-	sstvformats_ sstvformat;
-	{
-		if (sstv_format_argc == "martin1" || sstv_format_argc == "mt1") sstvformat = martin1;
-		else if (sstv_format_argc == "martin2" || sstv_format_argc == "mt2") sstvformat = martin2;
-		else if (sstv_format_argc == "scottie1" || sstv_format_argc == "sct1") sstvformat = scottie1;
-		else if (sstv_format_argc == "scottie2" || sstv_format_argc == "sct2") sstvformat = scottie2;
-		else if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") sstvformat = scottiedx;
-	}
-	
+	MidiNoteToImage noteslist(
+		midi_file_path,
+		track_number,
+		[&]() -> auto {
+			if (sstv_format_argc == "martin1" || sstv_format_argc == "mt1") return MidiNoteToImage::sstvformats_::martin1;
+			if (sstv_format_argc == "martin2" || sstv_format_argc == "mt2") return MidiNoteToImage::sstvformats_::martin2;
+			if (sstv_format_argc == "scottie1" || sstv_format_argc == "sct1") return MidiNoteToImage::sstvformats_::scottie1;
+			if (sstv_format_argc == "scottie2" || sstv_format_argc == "sct2") return MidiNoteToImage::sstvformats_::scottie2;
+			if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") return MidiNoteToImage::sstvformats_::scottiedx;
+			return MidiNoteToImage::sstvformats_::martin1;
+		}()
+	);
+
 	return 0;
 }
