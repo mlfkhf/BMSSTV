@@ -25,7 +25,7 @@ Who knows — maybe I'll write it, hahaha doge</sub>
 
 <sub>Hmm... Is there really nothing else to write? This is tough~</sub>
 
-This is a very free project. All code written by me is licensed under the **MIT License**.  
+This is a very free project. All code written by me is licensed under the `MIT License`.  
 You are free to redistribute the code or use it for other purposes, as long as you retain my copyright notice in all copies.  
 <sub>(Not sure what that is? The string `"Copyright 2026 Qinuo Sun(BH6BMJ)"` says it doesn't know either~)</sub>
 
@@ -33,17 +33,17 @@ You are free to redistribute the code or use it for other purposes, as long as y
 
 - **midifile**  
   **Copyright (c) 2015 Craig Stuart Sapp**  
-  Licensed under the MIT License. See the LICENSE file in its repository for full details.  
+  Licensed under the `MIT License`. See the LICENSE file in its repository for full details.  
   GitHub: https://github.com/craigsapp/midifile
 
 - **CLI11**  
   **Copyright (c) 2017 Henry Schreiner**  
-  Licensed under the BSD 3-Clause License. See the LICENSE file in its repository for full details.  
+  Licensed under the `BSD 3-Clause License`. See the LICENSE file in its repository for full details.  
   GitHub: https://github.com/CLIUtils/CLI11
 
 - **stb**  
   **Copyright (c) 2017 Sean Barrett**  
-  Licensed under the BSD 3-Clause License. See the LICENSE file in its repository for full details.  
+  Licensed under the `MIT License`. See the LICENSE file in its repository for full details.  
   GitHub: https://github.com/nothings/stb
 
 Thank you to the authors of the above projects! Long live open source!

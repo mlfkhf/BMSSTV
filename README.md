@@ -30,11 +30,11 @@
 Github上的仓库：https://github.com/craigsapp/midifile
 - CLI11
 **Copyright (c) 2017 Henry Schreiner**
-这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
+这个库遵循`BSD 3-Clause`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/CLIUtils/CLI11
 - stb 
 **Copyright (c) 2017 Sean Barrett**
-这个库遵循`BSD 3-Clause License`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
+这个库遵循`BSD 3-Clause`协议。协议具体内容请参阅它的仓库中的许可协议文件。<br>
 Github上的仓库：https://github.com/nothings/stb
 
 感谢上面项目的作者！开源万岁！
