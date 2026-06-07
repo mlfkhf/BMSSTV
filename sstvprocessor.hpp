@@ -9,6 +9,7 @@
 #include "constvalue.hpp"
 #include <list>
 
+using sstvbitimage_ = unsigned char[SSTV_HEIGHT_MARTIN_AND_SCOTTIE][SSTV_WIDTH_MARTIN_AND_SCOTTIE * 3]; // 256x320, 3 bytes per pixel (RGB)
 
 class MidiNoteToImage
 {
@@ -33,7 +34,10 @@ public:
 	const sstvformats_& getSSTVformat() const;
 	static double tickToSeconds(int tick, double ticks_per_quarter, double tempo_bpm);
 	static double midiPitchToFrequency(int pitch, double a4_freq = 440.0);
+	void generateBitImage();
+	sstvbitimage_& getBitImage();
 private:
 	std::list<Note> notes;
 	sstvformats_ sstvformat;
+	sstvbitimage_ sstvbitimage;
 };

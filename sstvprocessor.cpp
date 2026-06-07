@@ -59,3 +59,13 @@ inline double MidiNoteToImage::midiPitchToFrequency(int pitch, double a4_freq)
 {
     return a4_freq * pow(2.0, (pitch - 69) / 12.0);
 }
+
+void MidiNoteToImage::generateBitImage()
+{
+    
+}
+
+inline sstvbitimage_& MidiNoteToImage::getBitImage()
+{
+    return sstvbitimage;
+}
