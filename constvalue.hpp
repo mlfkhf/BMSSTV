@@ -5,7 +5,8 @@
 #define SSTV_WIDTH_MARTIN_AND_SCOTTIE 320
 
 
-//Pitches
+// Pitches
+// 我很遗憾没有任何办法产生其他音符了，而这些音符连一个完整的八度都没有
 #define		Fu6		1500
 #define		G6		1567.98
 #define		Gu6		1661.22
