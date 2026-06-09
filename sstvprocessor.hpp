@@ -7,16 +7,19 @@
 #include "include/stb/stb_image_write.h"
 #include "include/midifile/MidiFile.h"
 #include "constvalue.hpp"
-#include <list>
 
-using sstvbitimage_ = unsigned char[SSTV_HEIGHT_MARTIN_AND_SCOTTIE][SSTV_WIDTH_MARTIN_AND_SCOTTIE * 3]; // 256x320, 3 bytes per pixel (RGB)
+#include <list>
+#include <algorithm>
+#include <map>
+
+using sstvbitimage_ = unsigned char[SSTV_HEIGHT * SSTV_WIDTH * 3]; // 256x320, 3 bytes per pixel
 
 class MidiNoteToImage
 {
 public:
 	struct Note
 	{
-		int pitch;
+		double pitch;
 		double start_time;
 		double end_time;
 	};
@@ -30,12 +33,9 @@ public:
 	};
 	MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_);
 
-	const std::list<Note>& getNotes() const;
 	const sstvformats_& getSSTVformat() const;
-	static double tickToSeconds(int tick, double ticks_per_quarter, double tempo_bpm);
 	static double midiPitchToFrequency(int pitch, double a4_freq = 440.0);
 	void generateBitImage();
-	sstvbitimage_& getBitImage();
 private:
 	std::list<Note> notes;
 	sstvformats_ sstvformat;
