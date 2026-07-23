@@ -30,6 +30,8 @@
 #define emptytrack_bmj "MIDI 文件没有音轨: "
 #define noteon_bmj "是否将 MIDI 文件中的 Note On 事件视为 SSTV 图像的有效音符（默认启用）。"
 #define invaildimageformat_bmj "无效的图像格式: "
+#define generate_image_failed_bmj "生成图像失败。"
+#define a4freq_bmj "A4 音符的频率，单位为赫兹（默认是 440Hz）。"
 
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
@@ -52,5 +54,7 @@
 #define emptytrack_bmj "MIDI file has no track: "
 #define noteon_bmj "Whether to consider Note On events in MIDI file as valid notes for SSTV image (enabled by default)."
 #define invaildimageformat_bmj "Invalid image format: "
+#define generate_image_failed_bmj "Failed to generate image."
+#define a4freq_bmj "The frequency of A4 note in Hertz (default is 440Hz)."
 
 #endif

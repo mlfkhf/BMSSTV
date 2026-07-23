@@ -41,6 +41,7 @@ int main(int argc, char** argv)
 		output_image_file_path,
 		sstv_format_argc;
 	unsigned char track_number;
+	double a4freq_herz = 440.0;
 
 	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
@@ -69,6 +70,10 @@ int main(int argc, char** argv)
 		->default_val(0)
 		->check(CLI::Range(0, 255));
 
+	app.add_option("--a4equals", a4freq_herz, a4freq_bmj)
+		->default_val(440.0)
+		->check(CLI::Range(20.0, 20000.0));
+
 	try {
 		app.parse(argc, argv);
 		
@@ -87,8 +92,11 @@ int main(int argc, char** argv)
 			if (sstv_format_argc == "scottie2" || sstv_format_argc == "sct2") return MidiNoteToImage::sstvformats_::scottie2;
 			if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") return MidiNoteToImage::sstvformats_::scottiedx;
 			return MidiNoteToImage::sstvformats_::martin1;
-		}()
-	);
-
+		}(),
+		a4freq_herz
+			);
+	noteslist.generateBitImage();
+	if (stbi_write_png("output.png", SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3) == 0)
+		return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
 	return 0;
 }

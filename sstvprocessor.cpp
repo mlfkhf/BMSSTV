@@ -4,7 +4,7 @@
 #include "langs.hpp"
 
 
-MidiNoteToImage::MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_)
+MidiNoteToImage::MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_, const double a4_freq = 440.0)
 {
 	smf::MidiFile midifile;
 	if (!midifile.read(midi_file_path)) {
@@ -18,14 +18,14 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midi_file_path, unsigned cha
 		smf::MidiEvent& mev = midifile[track_number][event];
 
 		if (mev.isNoteOn()) {
-			if (midiPitchToFrequency(mev[1]) <= BLACK_AUDIO_FREQ || midiPitchToFrequency(mev[1]) >= WHITE_AUDIO_FREQ) continue;
+			if (midiPitchToFrequency(mev[1], a4_freq) <= BLACK_AUDIO_FREQ || midiPitchToFrequency(mev[1], a4_freq) >= WHITE_AUDIO_FREQ) continue;
 
 			double start_time = mev.seconds;
 
 			smf::MidiEvent* note_off = mev.getLinkedEvent();
 			if (note_off) {
 				double end_time = mev.seconds;
-				notes.push_back({ midiPitchToFrequency(mev[1]), start_time, end_time });
+				notes.push_back({ midiPitchToFrequency(mev[1], a4_freq), start_time, end_time });
 			}
 		}
 	}
@@ -51,6 +51,11 @@ const MidiNoteToImage::sstvformats_& MidiNoteToImage::getSSTVformat() const
 	return sstvformat;
 }
 
+const MidiNoteToImage::sstvformats_* MidiNoteToImage::getSSTVbitimage() const
+{
+	return reinterpret_cast<const sstvformats_*>(sstvbitimage);
+}
+
 inline double MidiNoteToImage::midiPitchToFrequency(int pitch, double a4_freq)
 {
 	return a4_freq * pow(2.0, (pitch - 69) / 12.0);
@@ -67,6 +72,8 @@ void MidiNoteToImage::generateBitImage()
 	case scottie2: color_time = SCOTTIE2_SINGLEPIXEL_TIME; break;
 	case scottiedx: color_time = SCOTTIEDX_SINGLEPIXEL_TIME; break;
 	}
+
+	//notes to pixels
 	for (auto i = notes.begin(); i != notes.end(); ++i)
 	{
 		if ((unsigned int)((i->start_time) / color_time) >= SSTV_WIDTH * SSTV_HEIGHT * 3) break;
@@ -75,6 +82,24 @@ void MidiNoteToImage::generateBitImage()
 			++j)
 		{
 			sstvbitimage[j] = (unsigned char)(((i->pitch - 1500.0) / (2300.0 - 1500.0)) * 255.0);
+		}
+	}
+	
+	//Martin: GBR
+	//Scottie: GRB
+	for (unsigned short i = 0; i < SSTV_WIDTH * SSTV_HEIGHT; i++)
+	{
+		switch (sstvformat)
+		{
+		case martin1: [[fallthrough]];
+		case martin2:
+			std::swap(sstvbitimage[i * 3], sstvbitimage[i * 3 + 2]); //(R) G (B) -> (B) G (R)
+			[[fallthrough]]; //(B) (G) R -> (G) (B) R
+		case scottie1: [[fallthrough]];
+		case scottie2: [[fallthrough]];
+		case scottiedx:
+			std::swap(sstvbitimage[i * 3], sstvbitimage[i * 3 + 1]); //(R) (G) B -> (G) (R) B
+			break;
 		}
 	}
 }

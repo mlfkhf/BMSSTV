@@ -31,9 +31,10 @@ public:
 		scottie2,
 		scottiedx
 	};
-	MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_);
+	MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_, const double a4_herz);
 
 	const sstvformats_& getSSTVformat() const;
+	const sstvformats_* getSSTVbitimage() const;
 	static double midiPitchToFrequency(int pitch, double a4_freq = 440.0);
 	void generateBitImage();
 private:
