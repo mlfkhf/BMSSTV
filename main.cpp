@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 
 	std::string
 		midi_file_path,
-		output_image_file_path,
+		output_image_file,
 		sstv_format_argc;
 	unsigned char track_number;
 	double a4freq_herz = 440.0;
@@ -52,10 +52,12 @@ int main(int argc, char** argv)
 			return "";
 		}
 	);
-	app.add_option("-o,--outputfile", output_image_file_path, outputfile_bmj)->check(
+	app.add_option("-o,--outputfile", output_image_file, outputfile_bmj)->check(
 		[](const std::string& imagefileext)->std::string
 		{
-			auto ext = std::filesystem::path(imagefileext).extension().string();
+			std::filesystem::path path(imagefileext);
+			if (path.has_parent_path()) return filename_is_a_path_bmj;
+			auto ext = path.extension().string();
 			if (!ext.empty()) {
 				std::string ext = ext.substr(1);
 				if (output_image_formats.find(ext) == output_image_formats.end()) return invaildimageformat_bmj + ext;
@@ -96,7 +98,21 @@ int main(int argc, char** argv)
 		a4freq_herz
 			);
 	noteslist.generateBitImage();
-	if (stbi_write_png("output.png", SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3) == 0)
-		return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+
+	auto ext = std::filesystem::path(output_image_file).extension().string().substr(1);
+	if (ext == "png") {
+		if (stbi_write_png(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3) == 0)
+			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+	}
+	else if (ext == "bmp") {
+		if (stbi_write_bmp(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage()) == 0)
+			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+	}
+	else if (ext == "jpg" || ext == "jpeg") {
+		if (stbi_write_jpg(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), 100) == 0)
+			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+	}
+	else
+		return app.exit(CLI::ParseError(invaildimageformat_bmj + ext, 0));
 	return 0;
 }

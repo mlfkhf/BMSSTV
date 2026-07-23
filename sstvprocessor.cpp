@@ -18,7 +18,7 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midi_file_path, unsigned cha
 		smf::MidiEvent& mev = midifile[track_number][event];
 
 		if (mev.isNoteOn()) {
-			if (midiPitchToFrequency(mev[1], a4_freq) <= BLACK_AUDIO_FREQ || midiPitchToFrequency(mev[1], a4_freq) >= WHITE_AUDIO_FREQ) continue;
+			if (midiPitchToFrequency(mev[1], a4_freq) < BLACK_AUDIO_FREQ || midiPitchToFrequency(mev[1], a4_freq) > WHITE_AUDIO_FREQ) continue;
 
 			double start_time = mev.seconds;
 

@@ -32,11 +32,12 @@
 #define invaildimageformat_bmj "无效的图像格式: "
 #define generate_image_failed_bmj "生成图像失败。"
 #define a4freq_bmj "A4 音符的频率，单位为赫兹（默认是 440Hz）。"
+#define filename_is_a_path_bmj "文件名是一个路径，请仅指定文件名。"
 
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
 #define midiinput_bmj "A midi file contains the reference music."
-#define outputfile_bmj "The path and filename of image output, file suffix decides image format(support .png .bmp .jpeg)."
+#define outputfile_bmj "The filename of image output, file suffix decides image format(support .png .bmp .jpeg)."
 #define sstvformat_bmj "SSTV formats.\n\
 		supprts:\n\
 		....martin1 - type martin1/mt1\n\
@@ -56,5 +57,6 @@
 #define invaildimageformat_bmj "Invalid image format: "
 #define generate_image_failed_bmj "Failed to generate image."
 #define a4freq_bmj "The frequency of A4 note in Hertz (default is 440Hz)."
+#define filename_is_a_path_bmj "The filename is a path, please specify the filename only."
 
 #endif
