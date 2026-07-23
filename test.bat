@@ -1,0 +1,1 @@
+bmsstv.exe -i "testmusic.mid" -o "test.bmp" --a4equals 1800 -f sct1

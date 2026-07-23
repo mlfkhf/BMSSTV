@@ -25,7 +25,7 @@
 #define tracknumber_bmj "音轨编号（单音轨时无需指定）"
 #define midifilecannotberead_bmj "无法读取的 MIDI 文件: "
 #define tempo_bmj "要应用的 MIDI 文件音乐的速度，过快的音符会被忽略。"
-#define midifile404_bmj "文件不存在:"
+#define midifile404_bmj "文件不存在: "
 #define cannotreadmidifile_bmj "无法读取 MIDI 文件 (文件可能损坏或不是有效的 MIDI 格式): "
 #define emptytrack_bmj "MIDI 文件没有音轨: "
 #define noteon_bmj "是否将 MIDI 文件中的 Note On 事件视为 SSTV 图像的有效音符（默认启用）。"
@@ -33,6 +33,7 @@
 #define generate_image_failed_bmj "生成图像失败。"
 #define a4freq_bmj "A4 音符的频率，单位为赫兹（默认是 440Hz）。"
 #define filename_is_a_path_bmj "文件名是一个路径，请仅指定文件名。"
+#define track_has_no_note_bmj "指定的音轨没有音符："
 
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
@@ -50,7 +51,7 @@
 #define tracknumber_bmj "Track number (no need to specify when single track)."
 #define midifilecannotberead_bmj "Failed to read MIDI file: "
 #define tempo_bmj "Tempo to be modified.Too fast notes will be ignored."
-#define midifile404_bmj "File not found:"
+#define midifile404_bmj "File not found: "
 #define cannotreadmidifile_bmj "Failed to read MIDI file (file may be damaged or not a valid MIDI format): "
 #define emptytrack_bmj "MIDI file has no track: "
 #define noteon_bmj "Whether to consider Note On events in MIDI file as valid notes for SSTV image (enabled by default)."
@@ -58,5 +59,6 @@
 #define generate_image_failed_bmj "Failed to generate image."
 #define a4freq_bmj "The frequency of A4 note in Hertz (default is 440Hz)."
 #define filename_is_a_path_bmj "The filename is a path, please specify the filename only."
+#define track_has_no_note_bmj "The specified track has no notes: "
 
 #endif

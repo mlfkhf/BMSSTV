@@ -17,7 +17,7 @@
 
 #include "include/CLI/CLI.hpp"
 
-#define VERSION_C "ver build20260531"
+#define VERSION_C "ver 0.1alpha Jun,23,2026"
 #define VERSION std::string(VERSION_C)
 
 const std::set<std::string> sstv_formats = {
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 		output_image_file,
 		sstv_format_argc;
 	unsigned char track_number;
-	double a4freq_herz = 440.0;
+	double a4freq_herz = 1800.0;
 
 	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 			if (path.has_parent_path()) return filename_is_a_path_bmj;
 			auto ext = path.extension().string();
 			if (!ext.empty()) {
-				std::string ext = ext.substr(1);
+				ext = ext.substr(1);
 				if (output_image_formats.find(ext) == output_image_formats.end()) return invaildimageformat_bmj + ext;
 				return "";
 			}
@@ -69,11 +69,11 @@ int main(int argc, char** argv)
 	app.add_option("-f,--sstvformat", sstv_format_argc, sstvformat_bmj)->check(CLI::IsMember(sstv_formats));
 	
 	app.add_option("-t,--track", track_number, tracknumber_bmj)
-		->default_val(0)
+		->default_val(2)
 		->check(CLI::Range(0, 255));
 
 	app.add_option("--a4equals", a4freq_herz, a4freq_bmj)
-		->default_val(440.0)
+		->default_val(1800.0)
 		->check(CLI::Range(20.0, 20000.0));
 
 	try {
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 	catch (const CLI::ParseError& e) {
 		return app.exit(e);
 	}
-
+	
 	MidiNoteToImage noteslist(
 		midi_file_path,
 		track_number,
@@ -96,20 +96,20 @@ int main(int argc, char** argv)
 			return MidiNoteToImage::sstvformats_::martin1;
 		}(),
 		a4freq_herz
-			);
+		);
 	noteslist.generateBitImage();
 
 	auto ext = std::filesystem::path(output_image_file).extension().string().substr(1);
 	if (ext == "png") {
-		if (stbi_write_png(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3) == 0)
+		if (!stbi_write_png(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3))
 			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
 	}
 	else if (ext == "bmp") {
-		if (stbi_write_bmp(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage()) == 0)
+		if (!stbi_write_bmp(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage()))
 			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
 	}
 	else if (ext == "jpg" || ext == "jpeg") {
-		if (stbi_write_jpg(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), 100) == 0)
+		if (!stbi_write_jpg(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), 100))
 			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
 	}
 	else
