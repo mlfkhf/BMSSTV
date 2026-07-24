@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	app.allow_windows_style_options();
 
 	std::string
-		midi_file_path,
+		midi_file,
 		output_image_file,
 		sstv_format_argc;
 	unsigned char track_number;
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	bool check_mode = false;
 	std::string error;
 
-	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
+	app.add_option("-m,-i,--midiinput", midi_file, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
 			if (!std::filesystem::exists(filename)) return midifile404_bmj + filename;
 			smf::MidiFile midifile;
@@ -103,13 +103,14 @@ int main(int argc, char** argv)
 		return app.exit(e);
 	}
 	
+	std::cout << "Reading MIDI file: " << midi_file << std::endl;
 	if (check_mode) {
 		std::cout << "TESTING MODE ON" << std::endl;
 		std::cout << "A4 frequency: " << a4_freq << "Hz" << std::endl;
 		std::cout << "Time scale: " << std::fixed << std::setprecision(2) << timescale << std::endl << std::endl;
 	}
 	MidiNoteToImage noteslist(
-		midi_file_path,
+		midi_file,
 		track_number,
 		[&]() -> auto {
 			if (sstv_format_argc == "martin1" || sstv_format_argc == "mt1") return MidiNoteToImage::sstvformats_::martin1;
@@ -134,6 +135,7 @@ int main(int argc, char** argv)
 		return app.exit(CLI::ValidationError(error, 0)); //Test mode stops here.
 	noteslist.generateBitImage();
 
+	std::cout << generating_image_bmj << std::endl;
 	auto ext = std::filesystem::path(output_image_file).extension().string().substr(1);
 	if (ext == "png") {
 		if (!stbi_write_png(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3))
@@ -149,5 +151,6 @@ int main(int argc, char** argv)
 	}
 	else
 		return app.exit(CLI::ParseError(invaildimageformat_bmj + ext, 0));
-	return 0;
+	std::cout << generate_image_success_bmj << output_image_file << std::endl;
+	return app.exit(CLI::Success());
 }

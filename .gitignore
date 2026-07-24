@@ -6,3 +6,13 @@
 /x64
 /BMSSTV/x64
 /hls.bmp
+/Release/BMSSTV.exe
+/Release/BMSSTV.pdb
+/BMSSTV/Release/BMSSTV.iobj
+/BMSSTV/Release/BMSSTV.ipdb
+/BMSSTV/Release/BMSSTV.log
+/BMSSTV/Release/BMSSTV.tlog/CL.command.1.tlog
+/BMSSTV/Release/BMSSTV.tlog/CL.read.1.tlog
+/BMSSTV/Release/BMSSTV.tlog/CL.write.1.tlog
+/BMSSTV/Release/main.obj
+/BMSSTV/Release/vc143.pdb

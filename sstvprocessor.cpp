@@ -23,8 +23,7 @@ MidiNoteToImage::MidiNoteToImage(
 	midifile.doTimeAnalysis();
 	midifile.linkNotePairs();
 
-	std::cout << "Reading MIDI file: " << midifile.getFilename() << std::endl;
-	if (check_mode)
+	if (check_mode) //CHECK MODE
 	{
 		std::cout << "Tempo (BPM): " << midifile.getTicksPerQuarterNote() << std::endl
 		<< "Number of tracks: " << midifile.getTrackCount() << std::endl;
@@ -61,6 +60,7 @@ MidiNoteToImage::MidiNoteToImage(
 		return;
 	}
 
+	std::cout << std::string(reading_track_bmj) << (int)track_number << std::endl;
 	bool track_has_no_note = true;
 	for (unsigned int event = 0; event < midifile[track_number].size(); event++) {
 		smf::MidiEvent& mev = midifile[track_number][event];
@@ -81,9 +81,13 @@ MidiNoteToImage::MidiNoteToImage(
 			}
 		}
 	}
+	std::cout << notes.size() << notes_have_been_translated_bmj << std::endl;
 	if (track_has_no_note) {
 		*error = std::string(track_has_no_note_bmj) + std::to_string((int)track_number);
 		return;
+	}
+	if (notes.empty()) {
+		*error = std::string(no_note_has_been_translated_bmj);
 	}
 
 	notes.sort([](const Note& a, const Note& b) {
