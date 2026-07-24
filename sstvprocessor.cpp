@@ -3,20 +3,21 @@
 #include "sstvprocessor.hpp"
 #include "langs.hpp"
 
-MidiNoteToImage::MidiNoteToImage(
-	const std::string& midi_file_path,
+MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 	unsigned char track_number,
 	sstvformats_ sstvformat_,
 	std::string* error,
 	const double timescale,
 	const double a4_freq,
-	const bool check_mode
-	)
+	const short key,
+	const bool check_mode)
 {
 	error->clear();
+	sstvbitimage = reinterpret_cast<sstvbitimage_*>(new sstvbitimage_);
+	std::cout  << "===== Reading MIDI file: " << midifile_ << " =====" << std::endl;
 	smf::MidiFile midifile;
-	if (!midifile.read(midi_file_path)) {
-		*error = std::string(midifilecannotberead_bmj) + midi_file_path;
+	if (!midifile.read(midifile_)) {
+		*error = std::string(midifilecannotberead_bmj) + midifile_;
 		return;
 	}
 
@@ -49,7 +50,7 @@ MidiNoteToImage::MidiNoteToImage(
 					}
 					else std::cout << "\tno linked note off event";
 
-					std::cout << "\tfreq: " << midiPitchToFrequency(mev[1], a4_freq) << "Hz" << std::endl;
+					std::cout << "\tfreq: " << midiPitchToFrequency(mev[1], a4_freq, key) << "Hz" << std::endl;
 					++note_count;
 				}
 			}
@@ -67,8 +68,8 @@ MidiNoteToImage::MidiNoteToImage(
 		if (mev.isNoteOn()) {
 			track_has_no_note = false;
 			if (
-				midiPitchToFrequency(mev[1], a4_freq) < BLACK_AUDIO_FREQ ||
-				midiPitchToFrequency(mev[1], a4_freq) > WHITE_AUDIO_FREQ
+				midiPitchToFrequency(mev[1], a4_freq, key) < BLACK_AUDIO_FREQ ||
+				midiPitchToFrequency(mev[1], a4_freq, key) > WHITE_AUDIO_FREQ
 			) continue;
 
 			// mev.seconds 返回值为秒，将其转换为毫秒以保持项目内时间单位一致
@@ -77,7 +78,7 @@ MidiNoteToImage::MidiNoteToImage(
 			smf::MidiEvent* note_off = mev.getLinkedEvent();
 			if (note_off) {
 				double end_time_ms = note_off->seconds * 1000.0 / timescale;
-				notes.push_back({ midiPitchToFrequency(mev[1], a4_freq), start_time_ms, end_time_ms });
+				notes.push_back({ midiPitchToFrequency(mev[1], a4_freq, key), start_time_ms, end_time_ms });
 			}
 		}
 	}
@@ -106,6 +107,11 @@ MidiNoteToImage::MidiNoteToImage(
 	}
 }
 
+MidiNoteToImage::~MidiNoteToImage() //注意：我既然写了这个那我就保证这个程序是内存安全的，如果有bug你找我
+{
+	delete[] sstvbitimage;
+}
+
 const MidiNoteToImage::sstvformats_& MidiNoteToImage::getSSTVformat() const
 {
 	return sstvformat;
@@ -116,9 +122,9 @@ const MidiNoteToImage::sstvformats_* MidiNoteToImage::getSSTVbitimage() const
 	return reinterpret_cast<const sstvformats_*>(sstvbitimage);
 }
 
-inline double MidiNoteToImage::midiPitchToFrequency(int pitch, double a4_freq)
+inline double MidiNoteToImage::midiPitchToFrequency(unsigned short pitch, double a4_freq, signed short key)
 {
-	return a4_freq * std::pow(2.0, (pitch - 57) / 12.0);
+	return a4_freq * std::pow(2.0, (pitch + key - 57) / 12.0);
 }
 
 
@@ -173,7 +179,7 @@ void MidiNoteToImage::generateBitImage()
 		{
 			double normalized = ((note.pitch - 1500.0) / (2300.0 - 1500.0)) * 255.0;
 			double clamped = std::clamp(normalized, 0.0, 255.0);
-			sstvbitimage[j] = static_cast<unsigned char>(clamped);
+			(*sstvbitimage)[j] = static_cast<unsigned char>(clamped);
 		}
 	}
 
@@ -185,12 +191,12 @@ void MidiNoteToImage::generateBitImage()
 		{
 		case martin1: [[fallthrough]];
 		case martin2:
-			std::swap(sstvbitimage[i * 3], sstvbitimage[i * 3 + 2]); //(R) G (B) -> (B) G (R)
+			std::swap((*sstvbitimage)[i * 3], (*sstvbitimage)[i * 3 + 2]); //(R) G (B) -> (B) G (R)
 			[[fallthrough]]; //(B) (G) R -> (G) (B) R, fallthrough to scottiedx case.
 		case scottie1: [[fallthrough]];
 		case scottie2: [[fallthrough]];
 		case scottiedx:
-			std::swap(sstvbitimage[i * 3], sstvbitimage[i * 3 + 1]); //(R) (G) B -> (G) (R) B
+			std::swap((*sstvbitimage)[i * 3], (*sstvbitimage)[i * 3 + 1]); //(R) (G) B -> (G) (R) B
 			break;
 		default:
 			break;

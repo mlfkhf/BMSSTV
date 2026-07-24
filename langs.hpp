@@ -42,6 +42,7 @@
 #define notes_have_been_translated_bmj " 个音符已被转换为像素。"
 #define no_note_has_been_translated_bmj "没有音符被转换为像素。"
 #define reading_track_bmj "正在读取音轨: 音轨"
+#define key_bmj "升（降）key的半音数"
 
 
 #elif BMSSTV_LANG == BMSSTV_LANG_EN
@@ -76,5 +77,6 @@
 #define notes_have_been_translated_bmj " notes have been translated into pixels."
 #define no_note_has_been_translated_bmj "No notes have been translated into pixels."
 #define reading_track_bmj "Reading track: track"
+#define key_bmj "Number of semitones for the key signature"
 
 #endif

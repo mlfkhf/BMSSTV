@@ -20,8 +20,6 @@
 #define VERSION_C "ver 0.21alpha Jun,24,2026"
 #define COPYRIGHT "BMSSTV Copyright (c) 2026 BH6BMJ. Licensed under the MIT License"
 
-//TODO: 增加升降key参数
-
 const std::set<std::string> sstv_formats = {
 	"martin1","mt1",
 	"martin2", "mt2",
@@ -48,9 +46,11 @@ int main(int argc, char** argv)
 		a4_freq = 1800.0,
 		timescale = 1.0;
 	bool check_mode = false;
+	signed short key = 0;
 	std::string error;
 
-	app.add_option("-m,-i,--midiinput", midi_file, midiinput_bmj)->check(
+	app.add_option(
+		"-m,-i,--midiinput", midi_file, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
 			if (!std::filesystem::exists(filename)) return midifile404_bmj + filename;
 			smf::MidiFile midifile;
@@ -58,8 +58,11 @@ int main(int argc, char** argv)
 			if (midifile.getTrackCount() == 0) return emptytrack_bmj + filename;
 			return "";
 		}
-	);
-	app.add_option("-o,--outputfile", output_image_file, outputfile_bmj)->check(
+	)
+	->required();
+
+	app.add_option(
+		"-o,--outputfile", output_image_file, outputfile_bmj)->check(
 		[](const std::string& imagefileext)->std::string
 		{
 			std::filesystem::path path(imagefileext);
@@ -87,6 +90,9 @@ int main(int argc, char** argv)
 		->default_val(1.0)
 		->check(CLI::Range(0.1, 4.0));
 
+	app.add_option("--key", key, key_bmj)
+		->default_val(0);
+
 	app.add_flag("-c,--check", check_mode, checkmode_bmj);
 
 	app.add_flag_callback("-v,--about", []() 
@@ -105,12 +111,13 @@ int main(int argc, char** argv)
 		return app.exit(e);
 	}
 	
-	std::cout << "Reading MIDI file: " << midi_file << std::endl;
-	if (check_mode) {
-		std::cout << "TESTING MODE ON" << std::endl;
-		std::cout << "A4 frequency: " << a4_freq << "Hz" << std::endl;
-		std::cout << "Time scale: " << std::fixed << std::setprecision(2) << timescale << std::endl << std::endl;
-	}
+	if (check_mode)
+		std::cout
+		<< "TESTING MODE ON" << std::endl
+		<< "A4 frequency: " << a4_freq << "Hz" << std::endl
+		<< "Time scale: " << std::fixed << std::setprecision(2) << timescale << std::endl
+		<< "Key increase: " << key << std::endl << std::endl;
+
 	MidiNoteToImage noteslist(
 		midi_file,
 		track_number,
@@ -125,16 +132,18 @@ int main(int argc, char** argv)
 		&error,
 		timescale,
 		a4_freq,
+		key,
 		check_mode
 		);
 
-	if (!error.empty()) 
+	if (!error.empty())  {
 		if (error == test_mode_over_bmj)
 		{
 			std::cout << test_mode_over_bmj << std::endl;
-			return app.exit(CLI::Success());
+			return app.exit(CLI::Success()); //Test mode stops here.
 		}
-		else return app.exit(CLI::ValidationError(error, 0)); //Test mode stops here.
+		else return app.exit(CLI::ValidationError(error, 0));
+	}
 	noteslist.generateBitImage();
 
 	std::cout << generating_image_bmj << std::endl;
