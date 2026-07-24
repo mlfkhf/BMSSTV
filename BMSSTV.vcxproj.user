@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>-i "testmusic.mid" -o "test.bmp" --a4equals 1800 -f sct1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-i "testmusic.mid" -o "test.bmp" --a4equals 1800 -f sct1 -c</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
     <LocalDebuggerMergeEnvironment>false</LocalDebuggerMergeEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
@@ -14,7 +14,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>-i "testmusic.mid" -o "test.bmp" --a4equals 1800 -f sct1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-i "testmusic.mid" -o "test.bmp" --a4equals 1800 -f sct1 -c</LocalDebuggerCommandArguments>
     <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
     <LocalDebuggerMergeEnvironment>false</LocalDebuggerMergeEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>

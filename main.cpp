@@ -17,8 +17,8 @@
 
 #include "include/CLI/CLI.hpp"
 
-#define VERSION_C "ver 0.1alpha Jun,23,2026"
-#define VERSION std::string(VERSION_C)
+#define VERSION_C "ver 0.2alpha Jun,24,2026"
+#define COPYRIGHT "Copyright (c) 2026 BH6BMJ"
 
 const std::set<std::string> sstv_formats = {
 	"martin1","mt1",
@@ -33,15 +33,20 @@ enum output_image_formatse {png, bmp, jpg};
 
 int main(int argc, char** argv)
 {
-	CLI::App app{ (std::string("BMSSTV - Build Music SSTV ") + VERSION + " by BH6BMJ") };
+	CLI::App app{ (std::string("BMSSTV - Build Music SSTV ") + VERSION_C + " by BH6BMJ") };
 	argv = app.ensure_utf8(argv);
+	app.allow_windows_style_options();
 
 	std::string
 		midi_file_path,
 		output_image_file,
 		sstv_format_argc;
 	unsigned char track_number;
-	double a4freq_herz = 1800.0;
+	double
+		a4_freq = 1800.0,
+		timescale = 1.0;
+	bool check_mode = false;
+	std::string error;
 
 	app.add_option("-m,-i,--midiinput", midi_file_path, midiinput_bmj)->check(
 		[](const std::string& filename) -> std::string {
@@ -72,9 +77,22 @@ int main(int argc, char** argv)
 		->default_val(2)
 		->check(CLI::Range(0, 255));
 
-	app.add_option("--a4equals", a4freq_herz, a4freq_bmj)
+	app.add_option("--a4equals", a4_freq, a4freq_bmj)
 		->default_val(1800.0)
 		->check(CLI::Range(20.0, 20000.0));
+
+	app.add_option("--timescale", timescale, timescale_bmj)
+		->default_val(1.0)
+		->check(CLI::Range(0.1, 4.0));
+
+	app.add_flag("-c,--check", check_mode, checkmode_bmj);
+
+	app.add_flag_callback("-v,--about", []() 
+		{
+			std::cout << VERSION_C << '\n' << COPYRIGHT << std::endl;
+			throw CLI::Success();
+		}, version_bmj);
+	app.set_version_flag("--version", std::string(VERSION_C) + '\n' + COPYRIGHT);
 
 	try {
 		app.parse(argc, argv);
@@ -84,6 +102,11 @@ int main(int argc, char** argv)
 		return app.exit(e);
 	}
 	
+	if (check_mode) {
+		std::cout << "TESTING MODE ON" << std::endl;
+		std::cout << "A4 frequency: " << a4_freq << "Hz" << std::endl;
+		std::cout << "Time scale: " << std::fixed << std::setprecision(2) << timescale << std::endl << std::endl;
+	}
 	MidiNoteToImage noteslist(
 		midi_file_path,
 		track_number,
@@ -95,22 +118,33 @@ int main(int argc, char** argv)
 			if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") return MidiNoteToImage::sstvformats_::scottiedx;
 			return MidiNoteToImage::sstvformats_::martin1;
 		}(),
-		a4freq_herz
+		&error,
+		timescale,
+		a4_freq,
+		check_mode
 		);
+
+	if (!error.empty()) 
+		if (error == test_mode_over_bmj)
+		{
+			std::cout << test_mode_over_bmj << std::endl;
+			return app.exit(CLI::Success());
+		}
+		return app.exit(CLI::ValidationError(error, 0)); //Test mode stops here.
 	noteslist.generateBitImage();
 
 	auto ext = std::filesystem::path(output_image_file).extension().string().substr(1);
 	if (ext == "png") {
 		if (!stbi_write_png(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), SSTV_WIDTH * 3))
-			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+			return app.exit(CLI::ValidationError(generate_image_failed_bmj, 0));
 	}
 	else if (ext == "bmp") {
 		if (!stbi_write_bmp(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage()))
-			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+			return app.exit(CLI::ValidationError(generate_image_failed_bmj, 0));
 	}
 	else if (ext == "jpg" || ext == "jpeg") {
 		if (!stbi_write_jpg(output_image_file.c_str(), SSTV_WIDTH, SSTV_HEIGHT, 3, noteslist.getSSTVbitimage(), 100))
-			return app.exit(CLI::ParseError(generate_image_failed_bmj, 0));
+			return app.exit(CLI::ValidationError(generate_image_failed_bmj, 0));
 	}
 	else
 		return app.exit(CLI::ParseError(invaildimageformat_bmj + ext, 0));

@@ -3,35 +3,87 @@
 #include "sstvprocessor.hpp"
 #include "langs.hpp"
 
-MidiNoteToImage::MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_, const double a4_freq = 440.0)
+MidiNoteToImage::MidiNoteToImage(
+	const std::string& midi_file_path,
+	unsigned char track_number,
+	sstvformats_ sstvformat_,
+	std::string* error,
+	const double timescale,
+	const double a4_freq,
+	const bool check_mode
+	)
 {
+	error->clear();
 	smf::MidiFile midifile;
 	if (!midifile.read(midi_file_path)) {
-		throw std::runtime_error(midifilecannotberead_bmj + midi_file_path);
+		*error = std::string(midifilecannotberead_bmj) + midi_file_path;
+		return;
 	}
 
 	midifile.doTimeAnalysis();
 	midifile.linkNotePairs();
 
+	std::cout << "Reading MIDI file: " << midifile.getFilename() << std::endl;
+	if (check_mode)
+	{
+		std::cout << "Tempo (BPM): " << midifile.getTicksPerQuarterNote() << std::endl
+		<< "Number of tracks: " << midifile.getTrackCount() << std::endl;
+		bool has_not_event = true;
+		for (int track = 0; track < midifile.getTrackCount(); ++track) {
+			has_not_event = true;
+			std::cout << "Track " << track << " has " << midifile[track].size() << " events." << std::endl
+			 << "Notes in track " << track << ":" << std::endl;
+			for (unsigned int event = 0, note_count = 0; event < midifile[track].size(); event++) {
+				smf::MidiEvent& mev = midifile[track][event];
+				if (mev.isNoteOn()) {
+					has_not_event = false;
+
+					std::cout << "note " << note_count <<
+						" :\tstart time:" <<
+						std::fixed << std::setprecision(4) << mev.seconds * timescale << "s ";
+
+					if (mev.getLinkedEvent()) {
+
+						std::cout << "\tend time:" <<
+							std::fixed << std::setprecision(4) << mev.getLinkedEvent()->seconds * timescale << "s ";
+
+					}
+					else std::cout << "\t\tno linked note off event";
+
+					std::cout << "\tfreq: " << midiPitchToFrequency(mev[1], a4_freq) << "Hz" << std::endl;
+					++note_count;
+				}
+			}
+			if (has_not_event) std::cout << "No notes found in this track." << std::endl;
+			std::cout << std::endl;
+		}
+		*error = test_mode_over_bmj;
+		return;
+	}
+
 	bool track_has_no_note = true;
-	for (int event = 0; event < midifile[track_number].size(); event++) {
+	for (unsigned int event = 0; event < midifile[track_number].size(); event++) {
 		smf::MidiEvent& mev = midifile[track_number][event];
 		if (mev.isNoteOn()) {
 			track_has_no_note = false;
-			if (midiPitchToFrequency(mev[1], a4_freq) < BLACK_AUDIO_FREQ || midiPitchToFrequency(mev[1], a4_freq) > WHITE_AUDIO_FREQ) continue;
+			if (
+				midiPitchToFrequency(mev[1], a4_freq) < BLACK_AUDIO_FREQ ||
+				midiPitchToFrequency(mev[1], a4_freq) > WHITE_AUDIO_FREQ
+			) continue;
 
 			// mev.seconds 返回值为秒，将其转换为毫秒以保持项目内时间单位一致
-			double start_time_ms = mev.seconds * 1000.0;
+			double start_time_ms = mev.seconds * 1000.0 * timescale;
 
 			smf::MidiEvent* note_off = mev.getLinkedEvent();
 			if (note_off) {
-				double end_time_ms = note_off->seconds * 1000.0;
+				double end_time_ms = note_off->seconds * 1000.0 * timescale;
 				notes.push_back({ midiPitchToFrequency(mev[1], a4_freq), start_time_ms, end_time_ms });
 			}
 		}
 	}
 	if (track_has_no_note) {
-		std::cout << track_has_no_note_bmj << (int)track_number << '\n';
+		*error = std::string(track_has_no_note_bmj) + std::to_string((int)track_number);
+		return;
 	}
 
 	notes.sort([](const Note& a, const Note& b) {
@@ -130,7 +182,7 @@ void MidiNoteToImage::generateBitImage()
 		case martin1: [[fallthrough]];
 		case martin2:
 			std::swap(sstvbitimage[i * 3], sstvbitimage[i * 3 + 2]); //(R) G (B) -> (B) G (R)
-			[[fallthrough]]; //(B) (G) R -> (G) (B) R
+			[[fallthrough]]; //(B) (G) R -> (G) (B) R, fallthrough to scottiedx case.
 		case scottie1: [[fallthrough]];
 		case scottie2: [[fallthrough]];
 		case scottiedx:

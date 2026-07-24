@@ -11,6 +11,7 @@
 #include <list>
 #include <algorithm>
 #include <map>
+#include <iomanip>
 
 using sstvbitimage_ = unsigned char[SSTV_HEIGHT * SSTV_WIDTH * 3]; // 256x320, 3 bytes per pixel
 
@@ -31,7 +32,15 @@ public:
 		scottie2,
 		scottiedx
 	};
-	MidiNoteToImage(const std::string& midi_file_path, unsigned char track_number, sstvformats_ sstvformat_, const double a4_herz);
+	MidiNoteToImage(
+		const std::string& midi_file_path,
+		unsigned char track_number,
+		sstvformats_ sstvformat_,
+		std::string* error,
+		const double timescale = 1.0,
+		const double a4_herz = 1800,
+		const bool check_mode = false
+	);
 
 	const sstvformats_& getSSTVformat() const;
 	const sstvformats_* getSSTVbitimage() const;

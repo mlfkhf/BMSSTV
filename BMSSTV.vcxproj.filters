@@ -222,4 +222,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="update_log.txt">
+      <Filter>源文件</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
