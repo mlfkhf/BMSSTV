@@ -18,7 +18,7 @@
 #include "include/CLI/CLI.hpp"
 
 #define VERSION_C "ver 0.21alpha Jun,24,2026"
-#define COPYRIGHT "Copyright (c) 2026 BH6BMJ"
+#define COPYRIGHT "BMSSTV Copyright (c) 2026 BH6BMJ. Licensed under the MIT License"
 
 const std::set<std::string> sstv_formats = {
 	"martin1","mt1",
