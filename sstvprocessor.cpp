@@ -47,7 +47,7 @@ MidiNoteToImage::MidiNoteToImage(
 							std::fixed << std::setprecision(4) << mev.getLinkedEvent()->seconds * timescale << "s ";
 
 					}
-					else std::cout << "\t\tno linked note off event";
+					else std::cout << "\tno linked note off event";
 
 					std::cout << "\tfreq: " << midiPitchToFrequency(mev[1], a4_freq) << "Hz" << std::endl;
 					++note_count;
@@ -72,11 +72,11 @@ MidiNoteToImage::MidiNoteToImage(
 			) continue;
 
 			// mev.seconds 返回值为秒，将其转换为毫秒以保持项目内时间单位一致
-			double start_time_ms = mev.seconds * 1000.0 * timescale;
+			double start_time_ms = mev.seconds * 1000.0 / timescale;
 
 			smf::MidiEvent* note_off = mev.getLinkedEvent();
 			if (note_off) {
-				double end_time_ms = note_off->seconds * 1000.0 * timescale;
+				double end_time_ms = note_off->seconds * 1000.0 / timescale;
 				notes.push_back({ midiPitchToFrequency(mev[1], a4_freq), start_time_ms, end_time_ms });
 			}
 		}

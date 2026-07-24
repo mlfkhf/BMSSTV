@@ -20,6 +20,8 @@
 #define VERSION_C "ver 0.21alpha Jun,24,2026"
 #define COPYRIGHT "BMSSTV Copyright (c) 2026 BH6BMJ. Licensed under the MIT License"
 
+//TODO: 增加升降key参数
+
 const std::set<std::string> sstv_formats = {
 	"martin1","mt1",
 	"martin2", "mt2",
@@ -68,7 +70,7 @@ int main(int argc, char** argv)
 				if (output_image_formats.find(ext) == output_image_formats.end()) return invaildimageformat_bmj + ext;
 				return "";
 			}
-			else return invaildimageformat_bmj + ext;
+			return invaildimageformat_bmj + ext;
 		}
 	);
 	app.add_option("-f,--sstvformat", sstv_format_argc, sstvformat_bmj)->check(CLI::IsMember(sstv_formats));
@@ -132,7 +134,7 @@ int main(int argc, char** argv)
 			std::cout << test_mode_over_bmj << std::endl;
 			return app.exit(CLI::Success());
 		}
-		return app.exit(CLI::ValidationError(error, 0)); //Test mode stops here.
+		else return app.exit(CLI::ValidationError(error, 0)); //Test mode stops here.
 	noteslist.generateBitImage();
 
 	std::cout << generating_image_bmj << std::endl;
