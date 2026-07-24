@@ -2,6 +2,7 @@
 
 一个方便、简洁的音乐SSTV图片生成器！
 如果你喜欢请你**帮忙点——亮右上角的Star** :star: 谢谢喵`
+如果您不太明白什么是**音乐SSTV图片**，您可以参考这个视频：https://www.bilibili.com/video/BV1wN4y1k7cW
 
 ## `0x00` 特点
 
