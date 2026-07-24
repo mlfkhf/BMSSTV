@@ -121,12 +121,12 @@ int main(int argc, char** argv)
 	MidiNoteToImage noteslist(
 		midi_file,
 		track_number,
-		[&]() -> auto {
-			if (sstv_format_argc == "martin1" || sstv_format_argc == "mt1") return MidiNoteToImage::sstvformats_::martin1;
-			if (sstv_format_argc == "martin2" || sstv_format_argc == "mt2") return MidiNoteToImage::sstvformats_::martin2;
-			if (sstv_format_argc == "scottie1" || sstv_format_argc == "sct1") return MidiNoteToImage::sstvformats_::scottie1;
-			if (sstv_format_argc == "scottie2" || sstv_format_argc == "sct2") return MidiNoteToImage::sstvformats_::scottie2;
-			if (sstv_format_argc == "scottiedx" || sstv_format_argc == "sctdx") return MidiNoteToImage::sstvformats_::scottiedx;
+		[&]() -> MidiNoteToImage::sstvformats_ {
+			if ((sstv_format_argc == "martin1") || (sstv_format_argc == "mt1")) return MidiNoteToImage::sstvformats_::martin1;
+			if ((sstv_format_argc == "martin2") || (sstv_format_argc == "mt2")) return MidiNoteToImage::sstvformats_::martin2;
+			if ((sstv_format_argc == "scottie1") || (sstv_format_argc == "sct1")) return MidiNoteToImage::sstvformats_::scottie1;
+			if ((sstv_format_argc == "scottie2") || (sstv_format_argc == "sct2")) return MidiNoteToImage::sstvformats_::scottie2;
+			if ((sstv_format_argc == "scottiedx") || (sstv_format_argc == "sctdx")) return MidiNoteToImage::sstvformats_::scottiedx;
 			return MidiNoteToImage::sstvformats_::martin1;
 		}(),
 		&error,

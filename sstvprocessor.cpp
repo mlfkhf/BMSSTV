@@ -14,6 +14,7 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 {
 	error->clear();
 	sstvbitimage = reinterpret_cast<sstvbitimage_*>(new sstvbitimage_); //为什么要new一个？因为不用new可能会爆栈
+	sstvformat = sstvformat_;
 	std::cout  << "===== Reading MIDI file: " << midifile_ << " =====" << std::endl;
 	smf::MidiFile midifile;
 	if (!midifile.read(midifile_)) {
@@ -68,8 +69,8 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 		if (mev.isNoteOn()) {
 			track_has_no_note = false;
 			if (
-				midiPitchToFrequency(mev[1], a4_freq, key) < BLACK_AUDIO_FREQ) mev[1] = BLACK_AUDIO_FREQ;
-			else if (midiPitchToFrequency(mev[1], a4_freq, key) > WHITE_AUDIO_FREQ) mev[1] = WHITE_AUDIO_FREQ;
+				midiPitchToFrequency(mev[1], a4_freq, key) < BLACK_AUDIO_FREQ) mev[1] = static_cast<int>(BLACK_AUDIO_FREQ);
+			else if (midiPitchToFrequency(mev[1], a4_freq, key) > WHITE_AUDIO_FREQ) mev[1] = static_cast<int>(WHITE_AUDIO_FREQ);
 
 			// mev.seconds 返回值为秒，将其转换为毫秒以保持项目内时间单位一致
 			double start_time_ms = mev.seconds * 1000.0 / timescale;
@@ -194,7 +195,6 @@ void MidiNoteToImage::generateBitImage()
 		case scottie2: [[fallthrough]];
 		case scottiedx:
 			std::swap((*sstvbitimage)[i * 3], (*sstvbitimage)[i * 3 + 1]); //(R) (G) B -> (G) (R) B
-			break;
 		default:
 			break;
 		}

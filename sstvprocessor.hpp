@@ -32,7 +32,8 @@ public:
 		scottie2,
 		scottiedx
 	};
-	MidiNoteToImage(const std::string& midi_file_path,
+	MidiNoteToImage(
+		const std::string& midifile_,
 		unsigned char track_number,
 		sstvformats_ sstvformat_,
 		std::string* error,
