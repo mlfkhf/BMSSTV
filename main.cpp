@@ -17,7 +17,7 @@
 
 #include "include/CLI/CLI.hpp"
 
-#define VERSION_C "ver 0.2alpha Jun,24,2026"
+#define VERSION_C "ver 0.21alpha Jun,24,2026"
 #define COPYRIGHT "Copyright (c) 2026 BH6BMJ"
 
 const std::set<std::string> sstv_formats = {
@@ -95,6 +95,7 @@ int main(int argc, char** argv)
 	app.set_version_flag("--version", std::string(VERSION_C) + '\n' + COPYRIGHT);
 
 	try {
+		if (argc == 1) throw CLI::CallForHelp();
 		app.parse(argc, argv);
 		
 	}
