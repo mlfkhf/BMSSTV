@@ -13,7 +13,7 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 	const bool check_mode)
 {
 	error->clear();
-	sstvbitimage = reinterpret_cast<sstvbitimage_*>(new sstvbitimage_);
+	sstvbitimage = reinterpret_cast<sstvbitimage_*>(new sstvbitimage_); //为什么要new一个？因为不用new可能会爆栈
 	std::cout  << "===== Reading MIDI file: " << midifile_ << " =====" << std::endl;
 	smf::MidiFile midifile;
 	if (!midifile.read(midifile_)) {
@@ -33,7 +33,7 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 			has_not_event = true;
 			std::cout << "Track " << track << " has " << midifile[track].size() << " events." << std::endl
 			 << "Notes in track " << track << ":" << std::endl;
-			for (unsigned int event = 0, note_count = 0; event < midifile[track].size(); event++) {
+			for (unsigned int event = 0, note_count = 0; event < static_cast<unsigned int>(midifile[track].size()); event++) {
 				smf::MidiEvent& mev = midifile[track][event];
 				if (mev.isNoteOn()) {
 					has_not_event = false;
@@ -63,7 +63,7 @@ MidiNoteToImage::MidiNoteToImage(const std::string& midifile_,
 
 	std::cout << std::string(reading_track_bmj) << (int)track_number << std::endl;
 	bool track_has_no_note = true;
-	for (unsigned int event = 0; event < midifile[track_number].size(); event++) {
+	for (unsigned int event = 0; event < static_cast<unsigned int>(midifile[track_number].size()); event++) {
 		smf::MidiEvent& mev = midifile[track_number][event];
 		if (mev.isNoteOn()) {
 			track_has_no_note = false;
